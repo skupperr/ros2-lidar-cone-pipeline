@@ -1,4 +1,0 @@
-[console_scripts]
-sensor_publisher = sensor_simulator.sensor_publisher:main
-sensor_subscriber = sensor_simulator.sensor_subscriber:main
-
