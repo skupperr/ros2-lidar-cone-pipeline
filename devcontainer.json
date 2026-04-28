@@ -1,0 +1,17 @@
+{
+  "name": "ROS2 Dev Environment",
+  "image": "ros:humble-ros-base",
+
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        "ms-python.python",
+        "ms-iot.vscode-ros"
+      ]
+    }
+  },
+
+  "postCreateCommand": "apt update && apt install -y python3-colcon-common-extensions",
+
+  "remoteUser": "root"
+}

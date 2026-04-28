@@ -26,10 +26,12 @@ class SensorPublisher(Node):
 
 def main(args=None):
 
+    # initializes the ROS communication system.
     rclpy.init(args=args)
 
     node = SensorPublisher()
 
+    # starts the ROS event loop. kinda like game loop or socket
     rclpy.spin(node)
 
     node.destroy_node()
