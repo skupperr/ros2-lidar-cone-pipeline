@@ -1,0 +1,43 @@
+running egg_info
+creating ../../build/lidar_pipeline/lidar_pipeline.egg-info
+writing ../../build/lidar_pipeline/lidar_pipeline.egg-info/PKG-INFO
+writing dependency_links to ../../build/lidar_pipeline/lidar_pipeline.egg-info/dependency_links.txt
+writing entry points to ../../build/lidar_pipeline/lidar_pipeline.egg-info/entry_points.txt
+writing requirements to ../../build/lidar_pipeline/lidar_pipeline.egg-info/requires.txt
+writing top-level names to ../../build/lidar_pipeline/lidar_pipeline.egg-info/top_level.txt
+writing manifest file '../../build/lidar_pipeline/lidar_pipeline.egg-info/SOURCES.txt'
+reading manifest file '../../build/lidar_pipeline/lidar_pipeline.egg-info/SOURCES.txt'
+writing manifest file '../../build/lidar_pipeline/lidar_pipeline.egg-info/SOURCES.txt'
+running build
+running build_py
+creating /workspace/ros2_ws/build/lidar_pipeline/build
+creating /workspace/ros2_ws/build/lidar_pipeline/build/lib
+creating /workspace/ros2_ws/build/lidar_pipeline/build/lib/lidar_pipeline
+copying lidar_pipeline/point_filter.py -> /workspace/ros2_ws/build/lidar_pipeline/build/lib/lidar_pipeline
+copying lidar_pipeline/__init__.py -> /workspace/ros2_ws/build/lidar_pipeline/build/lib/lidar_pipeline
+copying lidar_pipeline/lidar_simulator.py -> /workspace/ros2_ws/build/lidar_pipeline/build/lib/lidar_pipeline
+copying lidar_pipeline/cone_detector.py -> /workspace/ros2_ws/build/lidar_pipeline/build/lib/lidar_pipeline
+running install
+running install_lib
+creating /workspace/ros2_ws/install/lidar_pipeline/lib/python3.10/site-packages/lidar_pipeline
+copying /workspace/ros2_ws/build/lidar_pipeline/build/lib/lidar_pipeline/point_filter.py -> /workspace/ros2_ws/install/lidar_pipeline/lib/python3.10/site-packages/lidar_pipeline
+copying /workspace/ros2_ws/build/lidar_pipeline/build/lib/lidar_pipeline/__init__.py -> /workspace/ros2_ws/install/lidar_pipeline/lib/python3.10/site-packages/lidar_pipeline
+copying /workspace/ros2_ws/build/lidar_pipeline/build/lib/lidar_pipeline/lidar_simulator.py -> /workspace/ros2_ws/install/lidar_pipeline/lib/python3.10/site-packages/lidar_pipeline
+copying /workspace/ros2_ws/build/lidar_pipeline/build/lib/lidar_pipeline/cone_detector.py -> /workspace/ros2_ws/install/lidar_pipeline/lib/python3.10/site-packages/lidar_pipeline
+byte-compiling /workspace/ros2_ws/install/lidar_pipeline/lib/python3.10/site-packages/lidar_pipeline/point_filter.py to point_filter.cpython-310.pyc
+byte-compiling /workspace/ros2_ws/install/lidar_pipeline/lib/python3.10/site-packages/lidar_pipeline/__init__.py to __init__.cpython-310.pyc
+byte-compiling /workspace/ros2_ws/install/lidar_pipeline/lib/python3.10/site-packages/lidar_pipeline/lidar_simulator.py to lidar_simulator.cpython-310.pyc
+byte-compiling /workspace/ros2_ws/install/lidar_pipeline/lib/python3.10/site-packages/lidar_pipeline/cone_detector.py to cone_detector.cpython-310.pyc
+running install_data
+creating /workspace/ros2_ws/install/lidar_pipeline/share/ament_index
+creating /workspace/ros2_ws/install/lidar_pipeline/share/ament_index/resource_index
+creating /workspace/ros2_ws/install/lidar_pipeline/share/ament_index/resource_index/packages
+copying resource/lidar_pipeline -> /workspace/ros2_ws/install/lidar_pipeline/share/ament_index/resource_index/packages
+copying package.xml -> /workspace/ros2_ws/install/lidar_pipeline/share/lidar_pipeline
+running install_egg_info
+Copying ../../build/lidar_pipeline/lidar_pipeline.egg-info to /workspace/ros2_ws/install/lidar_pipeline/lib/python3.10/site-packages/lidar_pipeline-0.0.0-py3.10.egg-info
+running install_scripts
+Installing cone_detector script to /workspace/ros2_ws/install/lidar_pipeline/lib/sensor_simulator
+Installing lidar_simulator script to /workspace/ros2_ws/install/lidar_pipeline/lib/sensor_simulator
+Installing point_filter script to /workspace/ros2_ws/install/lidar_pipeline/lib/sensor_simulator
+writing list of installed files to '/workspace/ros2_ws/build/lidar_pipeline/install.log'

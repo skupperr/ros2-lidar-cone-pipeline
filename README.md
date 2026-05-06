@@ -1,50 +1,163 @@
-# ROS2 Sensor Simulator
+# ROS2 LiDAR Cone Detection Pipeline
 
 ## Overview
 
-This project implements a simple **sensor simulation system using ROS2**. It consists of two nodes:
+This project implements a **simplified LiDAR perception pipeline using ROS2** designed to simulate how autonomous vehicles detect cones on a race track.
 
-* **Publisher Node** - simulates a sensor by generating temperature values.
-* **Subscriber Node** - listens to the sensor data and prints warnings if values exceed a threshold.
+The system simulates LiDAR point clouds, processes them through multiple perception stages, and outputs a driving decision based on detected cones.
 
-The system is fully containerized using **Docker**, meaning **ROS2 does not need to be installed on the host machine**.
+The entire system is **containerized using Docker**, meaning **ROS2 does not need to be installed on the host machine**.
 
-Once the project is cloned, the entire system can be run with a single command.
+Once the repository is cloned, the entire pipeline can be executed using a single command.
 
 ---
 
 # System Architecture
 
-The ROS2 system consists of two nodes communicating through a topic.
+The ROS2 system consists of multiple nodes that form a **perception pipeline**.
 
 ```
-Sensor Publisher Node
-        │
-        │  Topic: /sensor_data
-        v
-Sensor Subscriber Node
+LiDAR Simulator
+      │
+      │  Topic: /lidar_points
+      ▼
+Point Filter
+      │
+      │  Topic: /filtered_points
+      ▼
+Cone Detector
+      │
+      │  Topic: /cone_centers
+      ▼
+Decision Node
 ```
 
-### Publisher
+Each node performs a specific task in the perception stack.
 
-* Generates random temperature values between **20°C and 30°C**
-* Publishes data every **1 second**
+---
 
-### Subscriber
+# Pipeline Description
 
-* Subscribes to `/sensor_data`
-* Prints received values
-* Triggers a warning when temperature exceeds **28°C**
+## 1. LiDAR Simulator Node
+
+This node simulates a **2D LiDAR scan**.
+
+It generates:
+
+* **Background points** representing environmental noise
+* **Clusters of points** representing traffic cones
+
+Each scan is published as a **list of (x, y) coordinates**.
+
+### Output Topic
+
+```
+/lidar_points
+```
+
+### Message Type
+
+```
+std_msgs/msg/Float32MultiArray
+```
+
+Example representation:
+
+```
+[x1, y1, x2, y2, x3, y3 ...]
+```
+
+Each pair represents one point in the LiDAR scan.
+
+---
+
+## 2. Point Filter Node
+
+The filter removes points that are outside the region of interest.
+
+The distance of each point from the LiDAR origin is calculated using:
+
+d = sqrt(x² + y²)
+
+Only points within a specified distance range are kept.
+
+### Purpose
+
+This simulates **preprocessing performed in real perception pipelines** where far-away or irrelevant points are discarded before clustering.
+
+### Output Topic
+
+```
+/filtered_points
+```
+
+---
+
+## 3. Cone Detector Node
+
+The cone detector identifies clusters of LiDAR points that represent cones.
+
+The algorithm:
+
+1. Iterates through filtered points
+2. Groups nearby points into clusters
+3. Calculates the **centroid of each cluster**
+
+Cluster center is calculated using:
+
+x_center = (1/N) * Σ xi
+
+y_center = (1/N) * Σ yi
+
+Each cluster center represents a **detected cone location**.
+
+### Output Topic
+
+```
+/cone_centers
+```
+
+Example:
+
+```
+Detected 2 cones
+Detected 1 cones
+```
+
+---
+
+## 4. Decision Node
+
+The decision node analyzes detected cone positions and produces a simple driving command.
+
+Example logic:
+
+| Condition           | Decision    |
+| ------------------- | ----------- |
+| Minimum distance < 2.0  | STOP |
+| Minimum distance < 5.0 | SLOW DOWN  |
+| No cone ahead       | CLEAR |
 
 Example output:
 
 ```
-Publishing: 23.44
-Received sensor value: 23.44
+Nearest cone: 4.188245872916913 → Decision: SLOW_DOWN
+```
 
-Publishing: 29.10
-Received sensor value: 29.10
-WARNING: Temperature too high!
+This simulates the **decision layer of an autonomous driving stack**.
+
+---
+
+# Example Output
+
+Example terminal output when the system runs:
+
+```
+[lidar_simulator]: Generated 50 lidar points
+[point_filter]: Filtered 50 → 42 points
+[cone_detector]: Detected 2 cones
+[decision_node]: Nearest cone: 4.188245872916913 → Decision: SLOW_DOWN
+
 ```
 
 ---
@@ -52,7 +165,7 @@ WARNING: Temperature too high!
 # Project Structure
 
 ```
-ros2-sensor-simulator
+ros2-lidar-cone-pipeline
 │
 ├── Dockerfile
 ├── start_ros.sh
@@ -61,24 +174,29 @@ ros2-sensor-simulator
 │
 └── ros2_ws
     └── src
-        └── sensor_simulator
+        └── lidar_pipeline
             ├── package.xml
+            ├── setup.cfg
             ├── setup.py
-            └── sensor_simulator
+            └── lidar_pipeline
                 ├── __init__.py
-                ├── sensor_publisher.py
-                └── sensor_subscriber.py
+                ├── lidar_simulator.py
+                ├── point_filter.py
+                ├── cone_detector.py
+                └── decision_node.py
 ```
 
 ### Important Files
 
-| File                   | Description                                          |
-| ---------------------- | ---------------------------------------------------- |
-| `Dockerfile`           | Builds the ROS2 container and compiles the workspace |
-| `start_ros.sh`         | Starts the ROS nodes inside the container            |
-| `run.sh`               | Helper script to build and run the system            |
-| `sensor_publisher.py`  | Simulated sensor node                                |
-| `sensor_subscriber.py` | Data processing node                                 |
+| File               | Description                                          |
+| ------------------ | ---------------------------------------------------- |
+| Dockerfile         | Builds the ROS2 container and compiles the workspace |
+| start_ros.sh       | Launches the ROS2 pipeline inside the container      |
+| run.sh             | Helper script to build and run the system            |
+| lidar_simulator.py | Simulates LiDAR scans                                |
+| point_filter.py    | Removes irrelevant points                            |
+| cone_detector.py   | Detects clusters representing cones                  |
+| decision_node.py   | Generates driving decisions                          |
 
 ---
 
@@ -88,7 +206,7 @@ You only need:
 
 * **Docker**
 
-Install Docker from:
+Install Docker:
 
 [https://docs.docker.com/get-docker/](https://docs.docker.com/get-docker/)
 
@@ -98,7 +216,7 @@ Verify installation:
 docker --version
 ```
 
-Example output:
+Example:
 
 ```
 Docker version 24.x.x
@@ -111,13 +229,13 @@ Docker version 24.x.x
 ## 1. Clone the Repository
 
 ```bash
-git clone https://github.com/<your-username>/ros2-sensor-simulator.git
+git clone https://github.com/<your-username>/ros2-lidar-cone-pipeline.git
 ```
 
-Navigate to the project:
+Navigate to the project directory:
 
 ```bash
-cd ros2-sensor-simulator
+cd ros2-lidar-cone-pipeline
 ```
 
 ---
@@ -130,72 +248,66 @@ Execute the helper script:
 ./run.sh
 ```
 
-This script will:
+This script will automatically:
 
 1. Build the Docker image
 2. Start the container
-3. Launch the ROS2 nodes
+3. Launch the ROS2 pipeline
 
 ---
 
-## 3. Expected Output
+# Expected Output
 
-Example logs:
+Example output:
 
 ```
-Building Docker image...
-Successfully built ...
-
-Running ROS2 sensor simulation...
-
+Building Docker image: ros2_lidar_simulation
+[+] Building 1.1s (12/12) FINISHED    
+Running Docker container from image: ros2_lidar_simulation
 Starting ROS2 Sensor System...
+Generated 50 lidar points
+Filtered 50 → 38 points
+Detected 1 cones
+Nearest cone: 6.9807022413710795 → Decision: CLEAR
 
-Publishing: 23.55
-Received sensor value: 23.55
-
-Publishing: 28.94
-Received sensor value: 28.94
-WARNING: Temperature too high!
 ```
-
-The publisher and subscriber are now communicating via ROS2 topics.
 
 ---
 
 # What the Helper Script Does
 
-The script `run.sh` performs two actions:
+The script `run.sh` performs two main actions.
 
 ### Build the Docker Image
 
 ```
-docker build -t ros_sensor_sim .
+docker build -t ros_lidar_pipeline .
 ```
 
 ### Run the Container
 
 ```
-docker run --rm ros_sensor_sim
+docker run --rm ros_lidar_pipeline
 ```
 
-The `--rm` flag ensures the container is removed after it stops.
+The `--rm` flag ensures the container is removed when it exits.
 
 ---
 
-# Running the Container Manually (Optional)
+# Running Manually (Optional)
 
-If you want to run the commands manually instead of using the script:
+If you want to run commands manually instead of using the script:
 
 ### Build Image
 
 ```bash
-docker build -t ros_sensor_sim .
+docker build -t ros_lidar_pipeline .
 ```
 
 ### Run Container
 
 ```bash
-docker run ros_sensor_sim
+docker run ros_lidar_pipeline
 ```
 
 ---
@@ -204,79 +316,95 @@ docker run ros_sensor_sim
 
 The container uses the official **ROS2 Humble base image**.
 
-Inside the container the following steps occur:
+Inside the container:
 
-1. ROS2 environment is loaded
+### Load ROS2 environment
 
 ```
 source /opt/ros/humble/setup.bash
 ```
 
-2. The ROS workspace environment is sourced
+### Load workspace
 
 ```
 source /workspace/ros2_ws/install/setup.bash
 ```
 
-3. ROS nodes are launched
+### Start the pipeline
 
 ```
-ros2 run sensor_simulator sensor_subscriber
-ros2 run sensor_simulator sensor_publisher
+ros2 run lidar_pipeline lidar_simulator
+ros2 run lidar_pipeline point_filter
+ros2 run lidar_pipeline cone_detector
+ros2 run lidar_pipeline decision_node
 ```
 
-The subscriber is started first so it can immediately receive messages.
+Each node communicates through ROS topics.
 
 ---
 
 # ROS Concepts Used
 
-### Node
+## Node
 
-A node is an executable program that participates in the ROS network.
+A **node** is an executable component of a ROS system.
 
-Example nodes in this project:
+Nodes in this project:
 
 ```
-sensor_publisher
-sensor_subscriber
+lidar_simulator
+point_filter
+cone_detector
+decision_node
 ```
 
 ---
 
-### Topic
+## Topic
 
-Nodes communicate through **topics**.
+Nodes communicate using **topics**.
 
-Publisher sends messages to:
+Examples:
 
 ```
-/sensor_data
+/lidar_points
+/filtered_points
+/cone_centers
 ```
-
-Subscriber listens to the same topic.
 
 ---
 
-### Message Type
+## Message Types
 
-The topic uses the standard ROS message:
+The pipeline uses:
 
 ```
-std_msgs/msg/Float32
+std_msgs/msg/Float32MultiArray
 ```
 
-This allows sending numeric values representing temperature.
+This allows transmitting arrays representing LiDAR points.
 
 ---
 
 # Technologies Used
 
-| Technology     | Purpose                    |
-| -------------- | -------------------------- |
-| ROS2 Humble    | Robotics middleware        |
-| Python         | ROS2 Python client library |
-| Docker         | Containerization           |
-| colcon         | ROS build system           |
+| Technology  | Purpose               |
+| ----------- | --------------------- |
+| ROS2 Humble | Robotics middleware   |
+| Python      | ROS2 node development |
+| Docker      | Containerization      |
+| colcon      | ROS build system      |
 
 ---
+
+<!-- # Future Improvements
+
+Possible improvements to make the pipeline closer to a real autonomous system:
+
+* Visualization using **RViz**
+* Use real **sensor_msgs/PointCloud2** messages
+* Implement **DBSCAN clustering**
+* Add **cone classification**
+* Integrate with a **path planning module** -->
+
+<!-- --- -->

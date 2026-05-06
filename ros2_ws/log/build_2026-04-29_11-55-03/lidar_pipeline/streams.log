@@ -1,0 +1,27 @@
+[0.318s] Invoking command in '/workspace/ros2_ws/src/lidar_pipeline': PYTHONPATH=/workspace/ros2_ws/build/lidar_pipeline/prefix_override:/usr/lib/python3/dist-packages/colcon_core/task/python/colcon_distutils_commands:/workspace/ros2_ws/install/lidar_pipeline/lib/python3.10/site-packages:${PYTHONPATH} /usr/bin/python3 -W ignore:setup.py install is deprecated -W ignore:easy_install command is deprecated setup.py egg_info --egg-base ../../build/lidar_pipeline build --build-base /workspace/ros2_ws/build/lidar_pipeline/build install --record /workspace/ros2_ws/build/lidar_pipeline/install.log --single-version-externally-managed install_data
+[0.437s] running egg_info
+[0.437s] writing ../../build/lidar_pipeline/lidar_pipeline.egg-info/PKG-INFO
+[0.438s] writing dependency_links to ../../build/lidar_pipeline/lidar_pipeline.egg-info/dependency_links.txt
+[0.438s] writing entry points to ../../build/lidar_pipeline/lidar_pipeline.egg-info/entry_points.txt
+[0.438s] writing requirements to ../../build/lidar_pipeline/lidar_pipeline.egg-info/requires.txt
+[0.439s] writing top-level names to ../../build/lidar_pipeline/lidar_pipeline.egg-info/top_level.txt
+[0.442s] reading manifest file '../../build/lidar_pipeline/lidar_pipeline.egg-info/SOURCES.txt'
+[0.443s] writing manifest file '../../build/lidar_pipeline/lidar_pipeline.egg-info/SOURCES.txt'
+[0.443s] running build
+[0.444s] running build_py
+[0.444s] copying lidar_pipeline/decision_node.py -> /workspace/ros2_ws/build/lidar_pipeline/build/lib/lidar_pipeline
+[0.446s] running install
+[0.446s] running install_lib
+[0.447s] copying /workspace/ros2_ws/build/lidar_pipeline/build/lib/lidar_pipeline/decision_node.py -> /workspace/ros2_ws/install/lidar_pipeline/lib/python3.10/site-packages/lidar_pipeline
+[0.448s] byte-compiling /workspace/ros2_ws/install/lidar_pipeline/lib/python3.10/site-packages/lidar_pipeline/decision_node.py to decision_node.cpython-310.pyc
+[0.449s] running install_data
+[0.451s] running install_egg_info
+[0.451s] removing '/workspace/ros2_ws/install/lidar_pipeline/lib/python3.10/site-packages/lidar_pipeline-0.0.0-py3.10.egg-info' (and everything under it)
+[0.452s] Copying ../../build/lidar_pipeline/lidar_pipeline.egg-info to /workspace/ros2_ws/install/lidar_pipeline/lib/python3.10/site-packages/lidar_pipeline-0.0.0-py3.10.egg-info
+[0.458s] running install_scripts
+[0.472s] Installing cone_detector script to /workspace/ros2_ws/install/lidar_pipeline/lib/lidar_pipeline
+[0.472s] Installing decision_node script to /workspace/ros2_ws/install/lidar_pipeline/lib/lidar_pipeline
+[0.473s] Installing lidar_simulator script to /workspace/ros2_ws/install/lidar_pipeline/lib/lidar_pipeline
+[0.474s] Installing point_filter script to /workspace/ros2_ws/install/lidar_pipeline/lib/lidar_pipeline
+[0.478s] writing list of installed files to '/workspace/ros2_ws/build/lidar_pipeline/install.log'
+[0.496s] Invoked command in '/workspace/ros2_ws/src/lidar_pipeline' returned '0': PYTHONPATH=/workspace/ros2_ws/build/lidar_pipeline/prefix_override:/usr/lib/python3/dist-packages/colcon_core/task/python/colcon_distutils_commands:/workspace/ros2_ws/install/lidar_pipeline/lib/python3.10/site-packages:${PYTHONPATH} /usr/bin/python3 -W ignore:setup.py install is deprecated -W ignore:easy_install command is deprecated setup.py egg_info --egg-base ../../build/lidar_pipeline build --build-base /workspace/ros2_ws/build/lidar_pipeline/build install --record /workspace/ros2_ws/build/lidar_pipeline/install.log --single-version-externally-managed install_data
